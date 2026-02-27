@@ -4,13 +4,55 @@ const slugify = require("slugify")
 //functions
 
 exports.getcateg = async (req, res) => {
-    const category = await CategModel.find({});
+  try {
+    const page = req.query.page * 1 || 1;
+    const limit = req.query.limit * 1 || 5;
+    const skip = (page - 1) * limit;
+
+    const category = await CategModel.find({})
+      .skip(skip)
+      .limit(limit);
 
     res.status(200).json({
-        results: category.length,
-        category
+      success: true,
+      results: category.length,
+      page,
+      data: category
     });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+// getcategbyid
+exports.getcategbyid = async (req,res)=>{
+
+    try{
+
+        const {id} = req.params
+        const categid = await CategModel.findById(id);
+        if(!categid){
+
+            res.status(404).send({msg:"no categ"});
+        }
+        res.status(200).send({date:categid});
+
+
+    }catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
 }
+
+
+
+// createcateg
 exports.createcateg = async (req,res) => {
 
 try {
@@ -31,3 +73,6 @@ try {
     }
 
 }
+
+
+
