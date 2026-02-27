@@ -1,13 +1,16 @@
 const CategModel = require("../models/categ.model");
 const slugify = require("slugify")
 
-exports.getcateg = (req, res) => {
+//functions
 
+exports.getcateg = async (req, res) => {
+    const category = await CategModel.find({});
 
-    res.send()
+    res.status(200).json({
+        results: category.length,
+        category
+    });
 }
-
-
 exports.createcateg = async (req,res) => {
 
 try {
@@ -28,11 +31,3 @@ try {
     }
 
 }
-
-
-
-
-
-
-
-
