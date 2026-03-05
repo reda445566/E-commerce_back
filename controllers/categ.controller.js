@@ -1,78 +1,81 @@
 const CategModel = require("../models/categ.model");
-const slugify = require("slugify")
+const slugify = require("slugify");
+const asyncHandler = require("express-async-handler");
+const ApiError = require("../utils/ApiError");
 
-//functions
+//getall
+exports.getcateg = asyncHandler(async (req, res) => {
 
-exports.getcateg = async (req, res) => {
-  try {
-    const page = req.query.page * 1 || 1;
-    const limit = req.query.limit * 1 || 5;
-    const skip = (page - 1) * limit;
+  const page = req.query.page * 1 || 1;
+  const limit = req.query.limit * 1 || 5;
+  const skip = (page - 1) * limit;
 
-    const category = await CategModel.find({})
-      .skip(skip)
-      .limit(limit);
+  const category = await CategModel.find({})
+    .skip(skip)
+    .limit(limit);
 
-    res.status(200).json({
-      success: true,
-      results: category.length,
-      page,
-      data: category
-    });
+  res.status(200).json({
+    success: true,
+    results: category.length,
+    page,
+    data: category
+  });
+});
 
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
+//get
+exports.getcategbyid = asyncHandler(async (req, res, next) => {
+
+  const { id } = req.params;
+
+  const categid = await CategModel.findById(id);
+
+  if (!categid) {
+    return next(new ApiError("Category not found", 404));
   }
-};
 
-// getcategbyid
-exports.getcategbyid = async (req,res)=>{
+  res.status(200).json({
+    success: true,
+    data: categid
+  });
+});
 
-    try{
+//create categ
+exports.createcateg = asyncHandler(async (req, res) => {
 
-        const {id} = req.params
-        const categid = await CategModel.findById(id);
-        if(!categid){
+  const { name } = req.body;
 
-            res.status(404).send({msg:"no categ"});
-        }
-        res.status(200).send({date:categid});
-
-
-    }catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
+  if (!name) {
+    throw new ApiError("Category name is required", 400);
   }
-}
 
+  const category = await CategModel.create({
+    name,
+    slug: slugify(name)
+  });
 
+  res.status(201).json({
+    success: true,
+    data: category
+  });
+});
 
-// createcateg
-exports.createcateg = async (req,res) => {
+//delete
+exports.deletecateg = asyncHandler(async (req, res, next) => {
 
-try {
+  const { id } = req.params;
 
-    const {name} = req.body;
-  const category = await CategModel.create({name,slug:slugify(name)})
- res.status(201).json({
-      success: true,
-      data: category
-    });
+  const categ = await CategModel.findByIdAndDelete(id);
 
+  if (!categ) {
+    return next(new ApiError("Category not found", 404));
+  }
 
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message || "Internal Server Error"
-        })
-    }
-
-}
+  res.status(200).json({
+    success: true,
+    message: "Category deleted successfully",
+    data: categ
+  });
+});
 
 
 
