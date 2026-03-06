@@ -6,9 +6,12 @@ const connect = async () => {
         console.log("Connected to MongoDB ");
     } catch (error) {
         console.log(error);
+        process.exit(1);
     }
 };
 
 module.exports = connect; // مهم جداً
+
+
 
 

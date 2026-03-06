@@ -78,4 +78,3 @@ exports.deletecateg = asyncHandler(async (req, res, next) => {
 });
 
 
-
