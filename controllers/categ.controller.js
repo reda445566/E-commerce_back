@@ -58,8 +58,35 @@ exports.createcateg = asyncHandler(async (req, res) => {
     data: category
   });
 });
+// update category
 
-//delete
+exports.updatecateg = asyncHandler(async(req,res,next) =>{
+  const {id} = req.params
+  const {name} = req.body
+  const categ = await CategModel.findByIdAndUpdate(
+      id,
+    {
+      name,
+      slug: slugify(name)
+    },
+    {
+      new: true
+    }
+
+  );
+  if(!categ){
+     return next(new ApiError("Category not found", 404));
+  }
+  res.status(200).json({
+    success: true,
+    data: categ
+  });
+
+})
+
+
+
+//deletecateg
 exports.deletecateg = asyncHandler(async (req, res, next) => {
 
   const { id } = req.params;

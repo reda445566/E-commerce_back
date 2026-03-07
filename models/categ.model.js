@@ -30,3 +30,4 @@ const CategModel = mongoose.model('Categ', categSchema);
 module.exports = CategModel;
 
 
+
