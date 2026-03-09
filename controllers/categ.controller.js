@@ -84,8 +84,6 @@ exports.updatecateg = asyncHandler(async(req,res,next) =>{
 
 })
 
-
-
 //deletecateg
 exports.deletecateg = asyncHandler(async (req, res, next) => {
 

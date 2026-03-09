@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const connect = require("./config/db");
 const categRoutes = require("./routers/categ.router");
+const supcateRoutes = require("./routers/supcateg.router")
 const errorMiddleware = require("./middleware/error_middleware"); // تم تعديل الاسم
 const ApiError = require("./utils/ApiError");
 
@@ -14,6 +15,7 @@ app.use(express.json());
 connect();
 
 app.use("/api/category", categRoutes);
+app.use("/api/supcateg",supcateRoutes);
 
 // لأي راوت غير موجود
 // لأي راوت غير موجود
@@ -37,3 +39,7 @@ process.on("unhandledRejection", (err) => {
     process.exit(1);
   });
 });
+
+
+
+
