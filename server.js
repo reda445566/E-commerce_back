@@ -10,6 +10,9 @@ dotenv.config({ path: ".env" });
 
 const app = express();
 
+const cors = require("cors");
+
+app.use(cors());
 app.use(express.json());
 
 connect();
@@ -39,6 +42,11 @@ process.on("unhandledRejection", (err) => {
     process.exit(1);
   });
 });
+
+
+
+
+
 
 
 

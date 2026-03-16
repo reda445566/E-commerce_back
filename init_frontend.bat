@@ -1,0 +1,6 @@
+@echo off
+echo Starting npm install cors...
+call npm install cors > npm_install_log.txt 2>&1
+echo Finished npm install cors. Starting create-vite...
+call npx -y create-vite@latest frontend --template react > vite_init_log.txt 2>&1
+echo Finished create-vite.
